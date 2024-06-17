@@ -26,9 +26,19 @@
 #ifndef __SERIAL_UART8250_H__
 #define __SERIAL_UART8250_H__
 
-#include <sbi/sbi_types.h>
+#include <sbi_types.h>
 
-int uart8250_init(unsigned long base, u32 in_freq, u32 baudrate, u32 reg_shift,
-		  u32 reg_width, u32 reg_offset);
+int uart8250_init(
+	unsigned long base, 
+	uint32_t in_freq, 
+	uint32_t baudrate, 
+	uint32_t reg_shift,
+	uint32_t reg_width, 
+	uint32_t reg_offset
+);
+
+static void uart8250_putc(char ch);
+
+static int uart8250_getc(void);
 
 #endif

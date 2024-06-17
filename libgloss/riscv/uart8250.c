@@ -8,23 +8,13 @@
  *   Anup Patel <anup.patel@wdc.com>
  *   Andreas Stergiopoulos <andreas.stergiopoulos@tuni.fi>
  *
- * This is a bare-metal driver for the 8250 UART module. The actual 
- * silicon and the virtual prototype implement the NS16650 hardware, 
- * which is backwards compativle to the 8250. Their difference is 
- * that the NS16650 is FIFO-based and thus better for multiprogramming 
- * environments, but in this case where we do bare-metal programming, 
- * the FIFO does not provide any significant advantage.
- *
- * To use this driver, the user should first call the UART 
- * initialization function in order to bring the hardware to a 
- * known state.
+ * For details regarding the driver, please check the associated header 
+ * file.
  */
 
-#include <sbi/riscv_asm.h>
-#include <sbi/riscv_io.h>
-#include <sbi/sbi_console.h>
-#include <sbi/sbi_domain.h>
-#include <sbi_utils/serial/uart8250.h>
+#include <riscv_asm.h>
+#include <riscv_io.h>
+#include <uart8250.h>
 
 /* clang-format off */
 
@@ -54,15 +44,15 @@
 
 /* clang-format on */
 
-static volatile char *uart8250_base;
-static u32 uart8250_in_freq;
-static u32 uart8250_baudrate;
-static u32 uart8250_reg_width;
-static u32 uart8250_reg_shift;
+static volatile char *uart8250_base = 0xFFF00000;
+static uint32_t uart8250_in_freq;
+static uint32_t uart8250_baudrate;
+static uint32_t uart8250_reg_width;
+static uint32_t uart8250_reg_shift;
 
-static u32 get_reg(u32 num)
+static uint32_t get_reg(uint32_t num)
 {
-	u32 offset = num << uart8250_reg_shift;
+	uint32_t offset = num << uart8250_reg_shift;
 
 	if (uart8250_reg_width == 1)
 		return readb(uart8250_base + offset);
@@ -72,9 +62,12 @@ static u32 get_reg(u32 num)
 		return readl(uart8250_base + offset);
 }
 
-static void set_reg(u32 num, u32 val)
+static void set_reg(
+    uint32_t num, 
+    uint32_t val
+)
 {
-	u32 offset = num << uart8250_reg_shift;
+	uint32_t offset = num << uart8250_reg_shift;
 
 	if (uart8250_reg_width == 1)
 		writeb(val, uart8250_base + offset);
@@ -99,16 +92,16 @@ static int uart8250_getc(void)
 	return -1;
 }
 
-static struct sbi_console_device uart8250_console = {
-	.name = "uart8250",
-	.console_putc = uart8250_putc,
-	.console_getc = uart8250_getc
-};
-
-int uart8250_init(unsigned long base, u32 in_freq, u32 baudrate, u32 reg_shift,
-		  u32 reg_width, u32 reg_offset)
+int uart8250_init(
+    unsigned long base, 
+    uint32_t in_freq, 
+    uint32_t baudrate, 
+    uint32_t reg_shift,
+	uint32_t reg_width, 
+    uint32_t reg_offset
+)
 {
-	u16 bdiv = 0;
+	uint16_t bdiv = 0;
 
 	uart8250_base      = (volatile char *)base + reg_offset;
 	uart8250_reg_shift = reg_shift;
@@ -146,9 +139,5 @@ int uart8250_init(unsigned long base, u32 in_freq, u32 baudrate, u32 reg_shift,
 	/* Set scratchpad */
 	set_reg(UART_SCR_OFFSET, 0x00);
 
-	sbi_console_set_device(&uart8250_console);
-
-	return sbi_domain_root_add_memrange(base, PAGE_SIZE, PAGE_SIZE,
-					    (SBI_DOMAIN_MEMREGION_MMIO |
-					    SBI_DOMAIN_MEMREGION_SHARED_SURW_MRW));
+	return 0;
 }
