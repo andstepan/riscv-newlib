@@ -3,7 +3,7 @@
 
 /* Convert linux's stat64 sturct to newlib's stat.  */
 void
-_conv_stat (struct stat *st, struct kernel_stat *kst)
+conv_stat (struct stat *st, struct kernel_stat *kst)
 {
   st->st_dev = kst->st_dev;
   st->st_ino = kst->st_ino;

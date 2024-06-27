@@ -5,7 +5,7 @@
 /* Get configurable system variables.  */
 
 long
-_sysconf(int name)
+sysconf(int name)
 {
   switch (name)
     {

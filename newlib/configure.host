@@ -871,7 +871,7 @@ newlib_cflags="${newlib_cflags} -DCLOCK_PROVIDED -DMALLOC_PROVIDED -DEXIT_PROVID
 	newlib_cflags="${newlib_cflags} -DSMALL_MEMORY -D_REENT_SMALL"
 	;;
   riscv*-*-*)
-	syscall_dir=syscalls
+	newlib_cflags="${newlib_cflags} -DMISSING_SYSCALL_NAMES"
 	;;
   sh*-*-*)
 	default_newlib_io_long_long="yes"

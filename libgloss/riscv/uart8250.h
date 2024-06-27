@@ -28,17 +28,13 @@
 
 #include <sbi_types.h>
 
-int uart8250_init(
-	unsigned long base, 
-	uint32_t in_freq, 
-	uint32_t baudrate, 
-	uint32_t reg_shift,
-	uint32_t reg_width, 
-	uint32_t reg_offset
-);
+/**
+ * 
+ */
+int uart8250_init();
 
-static void uart8250_putc(char ch);
+void uart8250_putc(char ch);
 
-static int uart8250_getc(void);
+int uart8250_getc(void);
 
 #endif

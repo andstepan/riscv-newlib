@@ -3,7 +3,7 @@
 
 /* Close a file.  */
 int
-_close(int file)
+close(int file)
 {
   return syscall_errno (SYS_close, file, 0, 0, 0, 0, 0);
 }

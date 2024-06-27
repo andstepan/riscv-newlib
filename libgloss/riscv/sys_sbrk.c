@@ -10,7 +10,7 @@ char *heap_ptr;
  *         left of memory on the board.
  */
 char *
-_sbrk (nbytes)
+sbrk (nbytes)
      int nbytes;
 {
   char        *base;
@@ -35,7 +35,7 @@ _sbrk (nbytes)
    is suggested by the newlib docs and suffices for a standalone
    system.  */
 void *
-_sbrk(ptrdiff_t incr)
+sbrk(ptrdiff_t incr)
 {
   static unsigned long heap_end;
 

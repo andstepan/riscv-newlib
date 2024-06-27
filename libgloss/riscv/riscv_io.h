@@ -11,6 +11,7 @@
 #define __RISCV_IO_H__
 
 #include <riscv_barrier.h>
+#include <stdint.h>
 
 static inline void __raw_writeb(uint8_t val, volatile void *addr)
 {

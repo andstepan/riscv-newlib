@@ -6,7 +6,7 @@
    distributed in the include subdirectory for this C library.  */
 
 int
-_fstat(int file, struct stat *st)
+fstat(int file, struct stat *st)
 {
   struct kernel_stat kst;
   int rv = syscall_errno (SYS_fstat, file, &kst, 0, 0, 0, 0);

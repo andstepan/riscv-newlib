@@ -5,7 +5,7 @@
    system without processes just returns 1.  */
 
 int
-_getpid()
+getpid()
 {
   return 1;
 }

@@ -11,24 +11,33 @@
 
 #include "newlib.h"
 
+
+
 #=========================================================================
 # crt0.S : Entry point for RISC-V user programs
 #=========================================================================
 
-  .text
-  .global _start
-  .type   _start, @function
-_start:
+.text
+.global _enter
+.type   _enter, @function
+.global uart8250_init
+.type   uart8250_init, @function
+.global _sp
+  
+_enter:
   # Initialize global pointer
 .option push
 .option norelax
 1:auipc gp, %pcrel_hi(__global_pointer$)
   addi  gp, gp, %pcrel_lo(1b)
 .option pop
+  la    sp, _sp
 
   # Clear the bss segment
-  la      a0, _edata
-  la      a2, _end
+  la      a0, metal_segment_bss_target_start
+  # la      a0, _edata
+  la      a2, metal_segment_bss_target_end
+  # la      a2, _end
   sub     a2, a2, a0
   li      a1, 0
   call    memset
@@ -48,9 +57,16 @@ _start:
 #endif
   call    __libc_init_array       # Run global initialization functions
 
+  # Call UART initialization function
+  lw      a0, 0(sp)                  # a0 = argc
+  addi    a1, sp, __SIZEOF_POINTER__ # a1 = argv
+  li      a2, 0                      # a2 = envp = NULL
+  call    uart8250_init
+
+  # Call main
   lw      a0, 0(sp)                  # a0 = argc
   addi    a1, sp, __SIZEOF_POINTER__ # a1 = argv
   li      a2, 0                      # a2 = envp = NULL
   call    main
   tail    exit
-  .size  _start, .-_start
+  .size  _enter, .-_enter

@@ -4,6 +4,7 @@
 
 gloss_hdrs = \
 	machine/syscall.h \
+	uart8250.h \
 
 gloss_srcs = \
 	nanosleep.c \
@@ -38,7 +39,8 @@ gloss_srcs = \
 	sys_unlink.c \
 	sys_utime.c \
 	sys_wait.c \
-	sys_write.c 
+	sys_write.c \
+	uart8250.c 
 
 gloss_specs = \
 	nano.specs sim.specs
@@ -95,7 +97,7 @@ install_libs_dir  = $(DESTDIR)$(prefix)/$(target_alias)/lib${MULTISUBDIR}
 # C compiler
 
 CC            := @CC@
-CFLAGS        := @CFLAGS@
+CFLAGS        := @CFLAGS@ -mcmodel=medany -O0
 CPPFLAGS      := -I$(obj_dir) -I$(src_dir)
 COMPILE       := $(CC) -MMD -MP $(CPPFLAGS) $(CFLAGS)
 

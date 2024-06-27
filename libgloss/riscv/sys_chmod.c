@@ -3,7 +3,7 @@
 
 /* Stub.  */
 int
-_chmod(const char *path, mode_t mode)
+chmod(const char *path, mode_t mode)
 {
   return -1;
 }

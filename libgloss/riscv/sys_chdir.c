@@ -2,7 +2,7 @@
 
 /* Stub.  */
 int
-_chdir(const char *path)
+chdir(const char *path)
 {
   return -1;
 }
